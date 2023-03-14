@@ -132,6 +132,63 @@ public class User {
                 ", enabled=" + enabled +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", about='" + about + '\'' +
+                ", contacts=" + contacts +
                 '}';
     }
 }
+
+
+//copy
+//    @PostMapping("/process_contact")
+//    //principal le form ko name ma ra contact entity ko name same vayesi Contact contact ma automatic aauxa data
+//    public String processContact(@ModelAttribute("contact") Contact contact,
+//                                 @RequestParam("imageProfile") MultipartFile file,
+//                                 Principal principal){
+//
+//
+//        try {
+//            //getting data of the logged in user(the one who is filling contact form)
+//            String name = principal.getName();
+//            //the one who is adding contact will get here
+//            User user = this.userRepositroy.getUserByEmail(name);
+//
+//            //contact ma user pass gareko
+//            contact.setUser(user);
+//
+//            //processing and uploading file
+//            if(file.isEmpty()){
+//                //if the file  is empty then try our message
+//                System.out.println("===FIle is empty====");
+//
+//            }else{
+//                //upload image file to folder and update the name to contact
+//                //getting file name
+//                contact.setImage(file.getOriginalFilename());
+//
+//                File saveFile = new ClassPathResource("static/image").getFile();
+//
+//                Path path = Paths.get(saveFile.getAbsoluteFile()+File.separator + file.getOriginalFilename());
+//                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+//
+//                System.out.println("======Image is uploaded======");
+//            }
+//
+//            //user bata contact nikaleko
+//            //adding new contact to the list of contacts of that user
+//            user.getContacts().add(contact);
+//
+//
+//
+//            //users contact will be updated
+//            this.userRepositroy.save(user);
+//
+//            System.out.println("Data " + contact);
+//
+//        }catch(Exception e){
+//            System.out.println("Error " + e.getMessage());
+//            e.printStackTrace();
+//        }
+//
+//        return "normal/add_contact_form";
+//
+//    }
