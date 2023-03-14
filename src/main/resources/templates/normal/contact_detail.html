@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="normal/base::Layout(~{::section})">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+</head>
+<body>
+<section>
+  <div class="detail">
+  <div class="card mr-3 ml-3">
+    <div class="card-body" th:if="${contact}">
+      <div class="container text-center">
+        <img src="" style="height: 200px; width: 200px;" class="picture" th:src="@{'/image/'+${contact.image}}" alt="imageProfile">
+        <h2 class="mt-3"><span  th:text ="${contact.name + ' ' + contact.secondName}"></span> </h2>
+        <table class="table table-bordered">
+
+          <tbody>
+          <tr>
+            <th scope="row">Id</th>
+            <td><span th:text="${contact.cId}"></span></td>
+          </tr>
+          <tr>
+            <th scope="row">Email</th>
+            <td><span th:text="${contact.email}"></span></td>
+          </tr>
+
+          <tr>
+            <th scope="row">Work</th>
+            <td><span th:text="${contact.work}"></span></td>
+          </tr>
+
+          <tr>
+            <th scope="row">Phone</th>
+            <td><span th:text="${contact.phone}"></span></td>
+          </tr>
+
+          <tr>
+            <th scope="row">Description</th>
+            <td><span th:text="${contact.description}"></span></td>
+          </tr>
+
+          </tbody>
+        </table>
+
+        <button class="btn btn-primary btn-sm">Update</button>
+
+        <button class="btn btn-danger btn-sm">Delete</button>
+
+      </div>
+    </div>
+    <h1 class="text-center p-3 bg-danger" th:unless="${contact}"> Permission Denied!!!</h1>
+
+  </div>
+
+  </div>
+</section>
+
+</body>
+</html>
