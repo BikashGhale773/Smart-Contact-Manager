@@ -31,7 +31,7 @@ public class User {
 
     //creates blank contacts with ArrayList
     //one user has many contacts
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
     private List<Contact> contacts = new ArrayList<>();
 
     //default constructor

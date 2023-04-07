@@ -105,4 +105,9 @@ public class Contact {
                 ", description='" + description + '\'' +
                 '}';
     }
+    @Override
+    public boolean equals(Object obj){
+        //cId is current object and OBject obj is parameterized object
+        return this.cId==((Contact)obj).getcId();
+    }
 }

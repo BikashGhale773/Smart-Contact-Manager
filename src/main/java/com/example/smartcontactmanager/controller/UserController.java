@@ -55,7 +55,7 @@ public class UserController {
     //home dashboard
     @RequestMapping("/index")
     //Model model to send data to the view
-    //we can get id or username withe the help of principal
+    //we can get id or username with the help of principal
     public String dashboard(Model model, Principal principal){
         model.addAttribute("title", "User Dashboard");
 
@@ -202,6 +202,79 @@ public class UserController {
             model.addAttribute("contact", contact);
 
         return "normal/contact_detail";
+    }
+
+    //delete contact handler
+    @GetMapping("/delete/{cId}")
+    public String deleteContact(@PathVariable("cId") Integer cId, Model model, HttpSession session, Principal principal){
+        Contact contact = this.contactRepository.findById(cId).get();
+        //making user unlink with contact
+        //delete old photo (user ma vako orphanRemoval true rakhesi yo line hatauda hunxa)
+        //contact.setUser(null);
+
+        //getting current user
+        User user = this.userRepositroy.getUserByEmail(principal.getName());
+
+        //to remove two object should match
+        user.getContacts().remove(contact);
+        this.userRepositroy.save(user);
+
+        //check...
+        this.contactRepository.delete(contact);
+        session.setAttribute("message", new Message("Contact deleted Successfully!!!", "success"));
+
+        return "redirect:/user/show-contacts/0";
+    }
+
+    //open update form handler
+    @PostMapping("/update-contact/{cId}")
+    public String updataForm(@PathVariable("cId") Integer cId, Model model){
+        model.addAttribute("title","Update Contact");
+
+        Contact contact = this.contactRepository.findById(cId).get();
+        model.addAttribute("contact", contact);
+        return "normal/update_form";
+    }
+
+    //update contact handler
+    @PostMapping("/process_update")
+    public String updatedForm(@ModelAttribute("contact") Contact contact, @RequestParam("imageProfile") MultipartFile file,
+                              Model model, Principal principal, HttpSession session){
+        try{
+            //old contact details
+            Contact oldContactDetails = this.contactRepository.findById(contact.getcId()).get();
+
+            //image
+            if(!file.isEmpty()){
+                //delete old image
+                File deleteFile = new ClassPathResource("static/image").getFile();
+                File file1 = new File(deleteFile, oldContactDetails.getImage());
+                file1.delete();
+
+                //upload new image
+                File saveFile = new ClassPathResource("static/image").getFile();
+
+                Path path = Paths.get(saveFile.getAbsoluteFile()+File.separator + file.getOriginalFilename());
+                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+                contact.setImage(file.getOriginalFilename());
+            }else{
+                contact.setImage(oldContactDetails.getImage());
+            }
+
+            User user = this.userRepositroy.getUserByEmail(principal.getName());
+            contact.setUser(user);
+
+            this.contactRepository.save(contact);
+            session.setAttribute("message", new Message("Your contact is Updated...!!!", "success"));
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        System.out.println("Contact Name======================= " +contact.getName());
+        return "redirect:/user/" +contact.getcId() + "/contact";
     }
 
 }
